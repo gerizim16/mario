@@ -47,7 +47,7 @@ function Map:init()
 
     self.tileWidth = 16
     self.tileHeight = 16
-    self.mapWidth = 40
+    self.mapWidth = 100
     self.mapHeight = 28
     self.tiles = {}
     self.animations = {}
@@ -79,10 +79,10 @@ function Map:init()
     local x = 1
     while x <= self.mapWidth - 27 do
         
-        -- 2% chance to generate a cloud
+        -- 10% chance to generate a cloud
         -- make sure we're 2 tiles from edge at least
         if x < self.mapWidth - 2 then
-            if math.random(20) == 1 then
+            if math.random(10) == 1 then
                 
                 -- choose a random vertical spot above where blocks/pipes generate
                 local cloudStart = math.random(self.mapHeight / 2 - 6)
@@ -92,8 +92,44 @@ function Map:init()
             end
         end
 
+        -- 10% chance to generate a rising pyramid
+        if math.random(10) == 1 and x < self.mapWidth - 14 and x > 27 then
+            -- random height
+            local pyramid_height = math.random(3, 6)
+            -- creates pyramid
+            for pyramid_x = 1, pyramid_height do
+                for pyramid_y = 1, pyramid_x do
+                    self:setTile(x + pyramid_x, self.mapHeight / 2 - pyramid_y, TILE_BRICK)
+                end
+                for y = self.mapHeight / 2, self.mapHeight do
+                    self:setTile(x + pyramid_x, y, TILE_BRICK)
+                end
+            end
+            x = x + pyramid_height
+            -- 50% chance to create empty gap
+            local tile_type = math.random(2) == 1 and TILE_BRICK or TILE_EMPTY
+            for i = 1, 3 do
+                for y = self.mapHeight / 2, self.mapHeight do
+                    self:setTile(x + i, y, tile_type)
+                end
+            end
+            x = x + 3
+            -- 33% chance to generate flipped pyramid
+            if math.random(3) == 1 then
+                local pyramid_height = math.random(4, 8)
+                -- creates pyramid
+                for pyramid_x = 1, pyramid_height do
+                    for pyramid_y = 1, pyramid_height - pyramid_x do
+                        self:setTile(x + pyramid_x, self.mapHeight / 2 - pyramid_y, TILE_BRICK)
+                    end
+                    for y = self.mapHeight / 2, self.mapHeight do
+                        self:setTile(x + pyramid_x, y, TILE_BRICK)
+                    end
+                end
+                x = x + pyramid_height
+            end
         -- 5% chance to generate a mushroom
-        if math.random(20) == 1 then
+        elseif math.random(20) == 1 then
             -- left side of pipe
             self:setTile(x, self.mapHeight / 2 - 2, MUSHROOM_TOP)
             self:setTile(x, self.mapHeight / 2 - 1, MUSHROOM_BOTTOM)
@@ -148,7 +184,7 @@ function Map:init()
         -- constants
         local flag_position = 3
         local flag_pole_height = 10
-        local pyramid_base = 18
+        local pyramid_base = 19
         local pyramid_height = 8
 
         -- creates column of tiles going to bottom of map
@@ -158,8 +194,8 @@ function Map:init()
         
         -- creates pyramid
         if x == self.mapWidth - pyramid_base then
-            for pyramid_x = 0, pyramid_height - 1 do
-                for pyramid_y = 0, pyramid_x do
+            for pyramid_x = 1, pyramid_height do
+                for pyramid_y = 1, pyramid_x do
                     self:setTile(x + pyramid_x, self.mapHeight / 2 - pyramid_y, TILE_BRICK)
                 end
             end
