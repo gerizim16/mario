@@ -247,6 +247,21 @@ function Map:collides(tile)
     return false
 end
 
+-- return whether a given tile is touchable
+function Map:touch(tile)
+    -- touchables
+    local touchables = {
+        FLAG_POLE_BOT, FLAG_POLE_MID, FLAG_POLE_TOP
+    }
+    -- iterate and return true if tile type matches
+    for _, v in ipairs(collidables) do
+        if tile.id == v then
+            return true
+        end
+    end
+    return false
+end
+
 -- function to update camera offset with delta time
 function Map:update(dt)
     self.player:update(dt)
