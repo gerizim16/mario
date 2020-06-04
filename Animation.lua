@@ -23,6 +23,7 @@ end
 
 function Animation:getCurrentFrameIndex()
     return self.currentFrame
+end
 
 function Animation:getCurrentFrame()
     return self.frames[self.currentFrame]
