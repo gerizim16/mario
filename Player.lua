@@ -151,6 +151,8 @@ function Player:init(map)
             elseif love.keyboard.isDown('right') then
                 self.direction = 'right'
                 self.dx = WALKING_SPEED
+            else
+                self.dx = 0
             end
 
             -- apply map's gravity before y velocity
