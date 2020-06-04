@@ -26,6 +26,11 @@ MUSHROOM_BOTTOM = 11
 JUMP_BLOCK = 5
 JUMP_BLOCK_HIT = 9
 
+-- flag pole
+FLAG_POLE_TOP = 8
+FLAG_POLE_MID = 12
+FLAG_POLE_BOT = 16
+
 -- a speed to multiply delta time to scroll map; smooth value
 local SCROLL_SPEED = 62
 
@@ -38,7 +43,7 @@ function Map:init()
 
     self.tileWidth = 16
     self.tileHeight = 16
-    self.mapWidth = 30
+    self.mapWidth = 40
     self.mapHeight = 28
     self.tiles = {}
 
@@ -67,7 +72,7 @@ function Map:init()
 
     -- begin generating the terrain using vertical scan lines
     local x = 1
-    while x < self.mapWidth do
+    while x <= self.mapWidth - 27 do
         
         -- 2% chance to generate a cloud
         -- make sure we're 2 tiles from edge at least
@@ -132,6 +137,42 @@ function Map:init()
             -- increment X so we skip two scanlines, creating a 2-tile gap
             x = x + 2
         end
+    end
+    -- generate end pyramid with flag
+    while x <= self.mapWidth do
+        -- constants
+        local flag_position = 3
+        local flag_pole_height = 10
+        local pyramid_base = 18
+        local pyramid_height = 8
+
+        -- creates column of tiles going to bottom of map
+        for y = self.mapHeight / 2, self.mapHeight do
+            self:setTile(x, y, TILE_BRICK)
+        end
+        
+        -- creates pyramid
+        if x == self.mapWidth - pyramid_base then
+            for pyramid_x = 0, pyramid_height - 1 do
+                for pyramid_y = 0, pyramid_x do
+                    self:setTile(x + pyramid_x, self.mapHeight / 2 - pyramid_y, TILE_BRICK)
+                end
+            end
+        end
+
+        if x == self.mapWidth - flag_position then
+            -- creates flagpole
+            self:setTile(x, self.mapHeight / 2 - 1, FLAG_POLE_BOT)
+            for y = self.mapHeight / 2 - flag_pole_height, self.mapHeight / 2 - 2 do
+                self:setTile(x, y, FLAG_POLE_MID)
+            end
+            self:setTile(x, self.mapHeight / 2 - flag_pole_height, FLAG_POLE_TOP)
+            
+            -- TODO: creates flag
+            
+        end
+        
+        x = x + 1
     end
 
     -- start the background music
