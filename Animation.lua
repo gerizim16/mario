@@ -22,7 +22,7 @@ function Animation:init(params)
 end
 
 function Animation:getCurrentFrameIndex()
-    return self.currentFrame
+    return self.getCurrentFrameIndex
 end
 
 function Animation:getCurrentFrame()
@@ -41,7 +41,6 @@ function Animation:update(dt)
     -- in case we skipped more than one frame
     while self.timer > self.interval do
         self.timer = self.timer - self.interval
-        self.currentFrame = (self.currentFrame + 1) % #self.frames
-        if self.currentFrame == 0 then self.currentFrame = 1 end
+        self.currentFrame = (self.currentFrame % #self.frames) + 1
     end
 end

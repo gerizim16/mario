@@ -31,6 +31,10 @@ FLAG_POLE_TOP = 8
 FLAG_POLE_MID = 12
 FLAG_POLE_BOT = 16
 
+-- flag
+FLAG1 = 13
+FLAG2 = 14
+
 -- a speed to multiply delta time to scroll map; smooth value
 local SCROLL_SPEED = 62
 
@@ -46,6 +50,7 @@ function Map:init()
     self.mapWidth = 40
     self.mapHeight = 28
     self.tiles = {}
+    self.animations = {}
 
     -- applies positive Y influence on anything affected
     self.gravity = 15
@@ -168,8 +173,16 @@ function Map:init()
             end
             self:setTile(x, self.mapHeight / 2 - flag_pole_height, FLAG_POLE_TOP)
             
-            -- TODO: creates flag
-            
+            -- creates flag
+            self:addAnimation(x, self.mapHeight / 2 - flag_pole_height, Animation{
+                    texture = self.spritesheet,
+                    frames = {
+                        self.sprites[FLAG1],
+                        self.sprites[FLAG2]
+                    },
+                    interval = 0.2},
+                10, 6  -- x, y pixel offsets
+            )
         end
         
         x = x + 1
@@ -201,7 +214,10 @@ end
 -- function to update camera offset with delta time
 function Map:update(dt)
     self.player:update(dt)
-    
+    -- update animations
+    for _, animation in ipairs(self.animations) do
+        animation['animation']:update(dt)
+    end
     -- keep camera's X coordinate following the player, preventing camera from
     -- scrolling past 0 to the left and the map's width
     self.camX = math.max(0, math.min(self.player.x - VIRTUAL_WIDTH / 2,
@@ -227,6 +243,14 @@ function Map:setTile(x, y, id)
     self.tiles[(y - 1) * self.mapWidth + x] = id
 end
 
+-- adds an animation to a given x-y coordinate to an integer value
+function Map:addAnimation(x, y, animation, xo, yo)
+    -- offsets
+    xo = xo or 0
+    yo = yo or 0
+    table.insert(self.animations, {x = x, y = y, animation = animation, xo = xo, yo = yo})
+end
+
 -- renders our map to the screen, to be called by main's render
 function Map:render()
     for y = 1, self.mapHeight do
@@ -237,6 +261,15 @@ function Map:render()
                     (x - 1) * self.tileWidth, (y - 1) * self.tileHeight)
             end
         end
+    end
+
+    for _, animation in ipairs(self.animations) do
+        love.graphics.draw(
+            self.spritesheet,
+            animation['animation']:getCurrentFrame(),
+            (animation['x'] - 1) * self.tileWidth + animation['xo'],
+            (animation['y'] - 1) * self.tileHeight + animation['yo']
+        )
     end
 
     self.player:render()
