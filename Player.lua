@@ -192,8 +192,8 @@ function Player:calculateJumps()
     -- if we have negative y velocity (jumping), check if we collide
     -- with any blocks above us
     if self.dy < 0 then
-        if self.map:tileAt(self.x, self.y).id ~= TILE_EMPTY or
-            self.map:tileAt(self.x + self.width - 1, self.y).id ~= TILE_EMPTY then
+        if self.map:collides(self.map:tileAt(self.x, self.y)) or 
+            self.map:collides(self.map:tileAt(self.x + self.width - 1, self.y)) then
             -- reset y velocity
             self.dy = 0
 
