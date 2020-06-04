@@ -95,7 +95,7 @@ function Map:init()
         -- 10% chance to generate a rising pyramid
         if math.random(10) == 1 and x < self.mapWidth - 14 and x > 27 then
             -- random height
-            local pyramid_height = math.random(3, 6)
+            local pyramid_height = math.random(3, 5)
             -- creates pyramid
             for pyramid_x = 1, pyramid_height do
                 for pyramid_y = 1, pyramid_x do
