@@ -47,7 +47,7 @@ function Map:init()
 
     self.tileWidth = 16
     self.tileHeight = 16
-    self.mapWidth = 100
+    self.mapWidth = 150
     self.mapHeight = 28
     self.tiles = {}
     self.animations = {}
@@ -93,7 +93,7 @@ function Map:init()
         end
 
         -- 10% chance to generate a rising pyramid
-        if math.random(10) == 1 and x < self.mapWidth - 14 and x > 27 then
+        if math.random(10) == 1 and x < self.mapWidth - 27 * 2 and x > 18 then
             -- random height
             local pyramid_height = math.random(3, 5)
             -- creates pyramid
@@ -116,7 +116,7 @@ function Map:init()
             x = x + 3
             -- 33% chance to generate flipped pyramid
             if math.random(3) == 1 then
-                local pyramid_height = math.random(4, 8)
+                local pyramid_height = pyramid_height + math.random(1, 6)
                 -- creates pyramid
                 for pyramid_x = 1, pyramid_height do
                     for pyramid_y = 1, pyramid_height - pyramid_x do
