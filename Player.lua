@@ -4,7 +4,7 @@
 
 Player = Class{}
 
-local WALKING_SPEED = 140
+local WALKING_SPEED = 150
 local JUMP_VELOCITY = 400
 
 function Player:init(map)
@@ -180,12 +180,12 @@ function Player:update(dt)
     self.behaviors[self.state](dt)
     self.animation:update(dt)
     self.currentFrame = self.animation:getCurrentFrame()
-    self.x = self.x + self.dx * dt
+    self.x = self.x + math.floor(self.dx * dt + 0.5)
 
     self:calculateJumps()
 
     -- apply velocity
-    self.y = self.y + self.dy * dt
+    self.y = self.y + math.floor(self.dy * dt + 0.5)
 end
 
 -- jumping and block hitting logic
