@@ -21,6 +21,9 @@ function Animation:init(params)
     self.currentFrame = 1
 end
 
+function Animation:getCurrentFrameIndex()
+    return self.currentFrame
+
 function Animation:getCurrentFrame()
     return self.frames[self.currentFrame]
 end
