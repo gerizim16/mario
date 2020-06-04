@@ -116,6 +116,7 @@ function love.draw()
     love.graphics.translate(math.floor(-map.camX + 0.5), math.floor(-map.camY + 0.5))
     map:render()
 
+    -- victory message
     if game_state == 'victory' then
         love.graphics.setFont(fonts['large'])
         love.graphics.printf("VICTORY!", map.mapWidthPixels - VIRTUAL_WIDTH, 10, VIRTUAL_WIDTH, 'center')
