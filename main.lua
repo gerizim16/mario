@@ -118,7 +118,7 @@ function love.draw()
 
     if game_state == 'victory' then
         love.graphics.setFont(fonts['large'])
-        love.graphics.printf("VICTORY!", map.mapWidthPixels, 10, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf("VICTORY!", map.mapWidthPixels - VIRTUAL_WIDTH, 10, VIRTUAL_WIDTH, 'center')
     end
 
     -- end virtual resolution
