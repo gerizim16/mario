@@ -30,11 +30,18 @@ love.graphics.setDefaultFilter('nearest', 'nearest')
 -- an object to contain our map data
 map = Map()
 
+-- game states play, victory
+game_state = 'play'
+
 -- performs initialization of all objects and data needed by program
 function love.load()
 
     -- sets up a different, better-looking retro font as our default
-    love.graphics.setFont(love.graphics.newFont('fonts/font.ttf', 8))
+    fonts = {
+        default = love.graphics.newFont('fonts/font.ttf', 8),
+        large = love.graphics.newFont('fonts/font.ttf', 32)
+    }
+    love.graphics.setFont(fonts['default'])
 
     -- sets up virtual screen resolution for an authentic retro feel
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -89,6 +96,9 @@ end
 function love.update(dt)
     map:update(dt)
 
+    -- check win condition
+    if map:touch(map:tileAt(map.player.x + map.player.width / 2, map.player.y + map.player.height / 2)) then game_state = 'victory' end
+
     -- reset all keys pressed and released this frame
     love.keyboard.keysPressed = {}
     love.keyboard.keysReleased = {}
@@ -105,6 +115,11 @@ function love.draw()
     -- renders our map object onto the screen
     love.graphics.translate(math.floor(-map.camX + 0.5), math.floor(-map.camY + 0.5))
     map:render()
+
+    if game_state == 'victory' then
+        love.graphics.setFont(fonts['large'])
+        love.graphics.printf("VICTORY!", map.mapWidthPixels, 10, VIRTUAL_WIDTH, 'center')
+    end
 
     -- end virtual resolution
     push:apply('end')

@@ -254,7 +254,7 @@ function Map:touch(tile)
         FLAG_POLE_BOT, FLAG_POLE_MID, FLAG_POLE_TOP
     }
     -- iterate and return true if tile type matches
-    for _, v in ipairs(collidables) do
+    for _, v in ipairs(touchables) do
         if tile.id == v then
             return true
         end
